@@ -10,10 +10,64 @@
     <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="taskListCtrl.js"></script>
+    <script type="text/javascript" src="taskDetailsCtrl.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.0.1/ui-bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.0.1/ui-bootstrap-tpls.min.js"></script>
 </head>
-<body>
-	
+<body ng-app="todosApp">
+	<div ng-controller="AddTasksCtrl" class="jumbotron col-md-3">
+		<form>
+			<div class="input-group">
+			  <span class="input-group-addon" id="task_name">Task Name</span>
+			  <input ng-model="task.name" type="text" class="form-control" aria-describedby="task_name">
+			</div>
+			<div class="input-group">
+			  <span class="input-group-addon" id="task_description">Task Description</span>
+			  <textarea ng-model="task.description" type="text" class="form-control" aria-describedby="task_description"></textarea>
+			</div>
+			<div class="input-group">
+			  <span class="input-group-addon" id="task_priority">Task priority</span>
+			  <input ng-model="task.priority" type="number" class="form-control" aria-describedby="task_priority">
+			</div>
+			<div class="input-group">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+                <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="task.dateToDo" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" id="task_date"/>
+            </div>
+			<button ng-click="addTask()" class="btn btn-success">Add Task</button>
+		</form>
+	</div>
+	<div ng-controller="tasksListCtrl" class="jumbotron col-md-5">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Task Name</th>
+					<th>Priority</th>
+					<th>Done</th>
+					<th>Delete Task</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="task in tasksList">
+					<td ng-click="showDetails(task._id)">{{task.name}}</td>
+					<td>{{task.priority}}</td>
+					<td>
+						<button ng-if="task.done" ng-click="setTaskState(task)" class="btn btn-success">
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+						</button>
+						<button ng-if="!task.done" ng-click="setTaskState(task)" class="btn btn-danger">
+							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+						</button>
+					</td>
+					<td>
+						<button ng-click="deleteTask(task._id)" class="btn btn-warning">DELETE</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div ng-controller="taskDetails" class="jumbotron col-md-4">{{task}}</div>	
 </body>
 </html>
